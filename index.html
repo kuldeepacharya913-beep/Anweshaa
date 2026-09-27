@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Anwesha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 20%, #fbf3ea 0%, #f5e6d6 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      margin: 0;
+      color: #3e2e24;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-handwriting {
+      font-family: 'Caveat', cursive;
+    }
+
+    .paper-card {
+      background: rgba(255, 253, 250, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 45px -15px rgba(118, 75, 48, 0.12), 0 0 0 1px rgba(224, 196, 175, 0.4);
+    }
+
+    .polaroid-card {
+      background: #ffffff;
+      box-shadow: 0 12px 28px -8px rgba(80, 50, 30, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .polaroid-card:hover {
+      transform: translateY(-8px) rotate(0deg) scale(1.02) !important;
+      box-shadow: 0 20px 38px -10px rgba(80, 50, 30, 0.25);
+      z-index: 10;
+    }
+
+    .tape-strip {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    @keyframes lidFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(-1.5deg); }
+    }
+    .gift-lid-hover {
+      animation: lidFloat 2.8s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake-anim {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .key-btn {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(120, 80, 60, 0.07);
+      transition: all 0.15s ease;
+    }
+    .key-btn:active {
+      transform: scale(0.92);
+      background: #f0ddd0;
+    }
+
+    .typing-caret::after {
+      content: '|';
+      animation: blink 0.9s infinite;
+      color: #92533c;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-[#eed7c5] selection:text-[#522919]">
+
+  <!-- Falling Rose Petals Canvas -->
+  <canvas id="petal-canvas" class="fixed inset-0 pointer-events-none z-10"></canvas>
+
+  <!-- Background Audio -->
+  <audio id="bg-audio" loop preload="auto">
+    <source src="https://assets.mixkit.co/music/preview/mixkit-romantic-dinner-641.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- ==================== SCREEN 1: 3D GIFT BOX ==================== -->
+  <div id="screen-gift" class="fixed inset-0 flex flex-col items-center justify-center p-6 text-center z-50 transition-all duration-1000">
+    <div onclick="openGift()" class="cursor-pointer group flex flex-col items-center">
+      
+      <div class="relative w-44 h-44 mb-6 transition-transform duration-500 group-hover:scale-105 active:scale-95">
+        <div class="absolute bottom-2 left-6 right-6 h-28 bg-gradient-to-br from-[#f2a2ab] to-[#dc7482] rounded-2xl shadow-xl flex justify-center overflow-hidden border border-white/40">
+          <div class="w-7 h-full bg-[#fde8ed] shadow-inner"></div>
+        </div>
+        <div class="absolute top-4 left-3 right-3 h-12 bg-gradient-to-r from-[#f5adb5] via-[#f7b6bd] to-[#df7a88] rounded-xl shadow-lg flex justify-center items-center gift-lid-hover border border-white/50">
+          <div class="w-8 h-full bg-[#fde8ed] shadow-sm"></div>
+          <div class="absolute -top-7 flex space-x-0.5">
+            <div class="w-8 h-8 rounded-full border-4 border-[#fde8ed] -rotate-45 shadow-sm"></div>
+            <div class="w-8 h-8 rounded-full border-4 border-[#fde8ed] rotate-45 shadow-sm"></div>
+          </div>
+        </div>
+        <div class="absolute inset-0 bg-white/20 rounded-full blur-2xl -z-10 group-hover:bg-rose-300/30 transition-all"></div>
+      </div>
+
+      <h1 class="font-serif-title text-2xl sm:text-3xl text-[#532e1f] tracking-wide">For you, Cutiepie</h1>
+      <p class="text-xs text-[#9d7356] mt-2.5 font-medium tracking-widest uppercase opacity-80 group-hover:opacity-100 transition-opacity">(Tap to Open)</p>
+    </div>
+  </div>
+
+  <!-- ==================== SCREEN 2: ROSE INTRO CARD ==================== -->
+  <div id="screen-intro" class="hidden min-h-screen flex-col items-center justify-center p-6 text-center opacity-0 transition-opacity duration-700 relative z-20">
+    
+    <div class="paper-card max-w-md w-full rounded-3xl p-8 sm:p-10 border border-[#ecd5c3]/80">
+      
+      <div class="inline-flex p-3 rounded-full bg-[#faece1] mb-4 text-[#8d4734] shadow-inner">
+        <svg class="w-6 h-6 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+
+      <h2 class="font-serif-title text-3xl text-[#4a2617] mb-1">Anwesha</h2>
+      <p class="text-xs text-[#9a6e50] tracking-wider uppercase mb-7 font-medium">A genuine apology from my heart</p>
+
+      <div class="bg-[#fcf6f0] rounded-2xl p-5 border border-[#e8d5c4]/60 text-[#593b2a] leading-relaxed mb-8 font-handwriting text-2xl shadow-sm">
+        "I hate how I treated you.<br>You deserved care, patience, and warmth, not my harsh behavior."
+      </div>
+
+      <button onclick="showPasscodeModal()" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#d97c6c] to-[#c76958] hover:from-[#c76958] hover:to-[#b75848] text-white text-xs font-semibold tracking-widest uppercase transition-all shadow-lg shadow-rose-900/15 active:scale-95 flex items-center justify-center gap-2">
+        <span>🔒</span> Unlock the Letter
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== SCREEN 3: KEYPAD PASSCODE MODAL ==================== -->
+  <div id="screen-modal" class="fixed inset-0 bg-stone-900/40 backdrop-blur-md hidden items-center justify-center p-4 z-50 opacity-0 transition-opacity duration-300">
+    <div id="keypad-box" class="paper-card max-w-xs w-full rounded-3xl p-7 text-center relative border border-white/60">
+      
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-xs w-7 h-7 flex items-center justify-center rounded-full bg-[#faece1] text-[#7d533b] hover:bg-[#ebd5c5] transition">✕</button>
+
+      <div class="w-12 h-12 mx-auto rounded-full bg-[#fbebe0] flex items-center justify-center text-xl mb-3 shadow-inner">
+        🔐
+      </div>
+      <h3 class="font-serif-title text-xl text-[#4b2718]">Enter Passcode</h3>
+      <p class="text-xs text-[#9c7156] mb-5 italic font-medium">your bday</p>
+
+      <!-- Pin Dots -->
+      <div class="flex justify-center gap-3.5 mb-7">
+        <div id="dot-0" class="w-3.5 h-3.5 rounded-full border-2 border-[#d97c6c] transition-all duration-200"></div>
+        <div id="dot-1" class="w-3.5 h-3.5 rounded-full border-2 border-[#d97c6c] transition-all duration-200"></div>
+        <div id="dot-2" class="w-3.5 h-3.5 rounded-full border-2 border-[#d97c6c] transition-all duration-200"></div>
+        <div id="dot-3" class="w-3.5 h-3.5 rounded-full border-2 border-[#d97c6c] transition-all duration-200"></div>
+      </div>
+
+      <!-- Keypad -->
+      <div class="grid grid-cols-3 gap-3 max-w-[210px] mx-auto text-base font-semibold text-[#543324]">
+        <button onclick="pressKey('1')" class="key-btn h-12 rounded-2xl">1</button>
+        <button onclick="pressKey('2')" class="key-btn h-12 rounded-2xl">2</button>
+        <button onclick="pressKey('3')" class="key-btn h-12 rounded-2xl">3</button>
+        <button onclick="pressKey('4')" class="key-btn h-12 rounded-2xl">4</button>
+        <button onclick="pressKey('5')" class="key-btn h-12 rounded-2xl">5</button>
+        <button onclick="pressKey('6')" class="key-btn h-12 rounded-2xl">6</button>
+        <button onclick="pressKey('7')" class="key-btn h-12 rounded-2xl">7</button>
+        <button onclick="pressKey('8')" class="key-btn h-12 rounded-2xl">8</button>
+        <button onclick="pressKey('9')" class="key-btn h-12 rounded-2xl">9</button>
+        <div></div>
+        <button onclick="pressKey('0')" class="key-btn h-12 rounded-2xl">0</button>
+        <button onclick="clearKeys()" class="key-btn h-12 rounded-2xl text-xs font-semibold text-[#a36854]">Del</button>
+      </div>
+
+      <div id="error-msg" class="text-xs text-rose-500 font-medium mt-4 min-h-[16px]"></div>
+    </div>
+  </div>
+
+  <!-- ==================== SCREEN 4: POLAROIDS & TYPEWRITER LETTER ==================== -->
+  <div id="screen-letter" class="hidden min-h-screen py-12 px-4 max-w-3xl mx-auto opacity-0 transition-opacity duration-1000 relative z-20">
+
+    <div class="flex justify-end mb-6">
+      <button onclick="restartFlow()" class="text-xs border border-[#cfab93] px-4 py-2 rounded-full text-[#7d5038] hover:bg-white/60 transition shadow-sm font-medium">
+        ↺ Replay
+      </button>
+    </div>
+
+    <!-- 3 Polaroids -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+      
+      <!-- Polaroid 1 -->
+      <div class="polaroid-card p-3 pb-6 rounded-md transform -rotate-3 border border-[#f0e3d6] relative">
+        <div class="w-14 h-5 tape-strip absolute -top-2.5 left-1/2 -translate-x-1/2 rotate-1"></div>
+        <div class="w-full h-48 overflow-hidden rounded-sm mb-2.5 bg-stone-100">
+          <img src="photo1.jpg" onerror="this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&auto=format&fit=crop'" class="w-full h-full object-cover" alt="Our Memory" />
+        </div>
+        <p class="font-handwriting text-center text-lg text-[#6d4632]">when we were happiest</p>
+      </div>
+
+      <!-- Polaroid 2 -->
+      <div class="polaroid-card p-3 pb-6 rounded-md transform rotate-2 border border-[#f0e3d6] relative">
+        <div class="w-14 h-5 tape-strip absolute -top-2.5 left-1/2 -translate-x-1/2 -rotate-2"></div>
+        <div class="w-full h-48 overflow-hidden rounded-sm mb-2.5 bg-stone-100">
+          <img src="photo2.jpg" onerror="this.src='https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500&auto=format&fit=crop'" class="w-full h-full object-cover" alt="Our Memory" />
+        </div>
+        <p class="font-handwriting text-center text-lg text-[#6d4632]">your smile that I miss</p>
+      </div>
+
+      <!-- Polaroid 3 -->
+      <div class="polaroid-card p-3 pb-6 rounded-md transform -rotate-1 border border-[#f0e3d6] relative">
+        <div class="w-14 h-5 tape-strip absolute -top-2.5 left-1/2 -translate-x-1/2 rotate-2"></div>
+        <div class="w-full h-48 overflow-hidden rounded-sm mb-2.5 bg-stone-100">
+          <img src="photo3.jpg" onerror="this.src='https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=500&auto=format&fit=crop'" class="w-full h-full object-cover" alt="Our Memory" />
+        </div>
+        <p class="font-handwriting text-center text-lg text-[#6d4632]">moments I cherish</p>
+      </div>
+
+    </div>
+
+    <!-- Letter Parchment -->
+    <div class="paper-card rounded-3xl p-7 sm:p-12 relative mb-10 border border-[#ecd5c3]">
+      <div class="w-24 h-6 tape-strip absolute -top-3 left-12 -rotate-2"></div>
+      
+      <h3 class="font-handwriting text-3xl sm:text-4xl text-[#8d4734] mb-6">Dear Cutiepie,</h3>
+
+      <!-- Typewriter Container -->
+      <div id="letter-content" class="space-y-5 font-handwriting text-xl sm:text-2xl text-[#4a3224] leading-relaxed min-h-[180px] typing-caret">
+      </div>
+
+      <!-- CTA & Formspree Form -->
+      <div id="cta-box" class="mt-10 pt-8 border-t border-[#eed7c7] opacity-0 transition-opacity duration-1000">
+        
+        <div class="text-center mb-8">
+          <p class="font-handwriting text-2xl sm:text-3xl text-[#8d4734] font-bold mb-2">
+            "If you forgive me, text me on 6371668442"
+          </p>
+          <p class="text-xs text-[#9d7358] mb-4">Take all the time you need. I'm right here whenever you're ready.</p>
+          
+          <a href="https://wa.me/916371668442?text=I%20forgive%20you%20Cutiepie" 
+             target="_blank" 
+             class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-semibold uppercase tracking-wider shadow-md transition transform active:scale-95">
+            <span>💬 Text Me On WhatsApp</span>
+          </a>
+        </div>
+
+        <!-- Embedded Formspree Endpoint -->
+        <div class="max-w-md mx-auto bg-[#fffaf5] p-6 rounded-2xl border border-[#ecd5c3] shadow-sm">
+          <h4 class="font-serif-title text-base sm:text-lg text-[#5a3320] text-center mb-1">Or leave a message here</h4>
+          <p class="text-[11px] text-[#9a6e50] text-center mb-4 italic">Write whatever you feel—it goes directly to my email.</p>
+
+          <form id="feedback-form" action="https://formspree.io/f/mbglppkq" method="POST" class="space-y-3">
+            <textarea 
+              name="message" 
+              rows="4" 
+              required
+              placeholder="Tell me what you're thinking or how you feel..." 
+              class="w-full text-sm p-3.5 rounded-xl border border-[#e5cebc] bg-[#fffdfa] text-[#4a3224] placeholder-[#b08b73] focus:outline-none focus:ring-2 focus:ring-[#d97c6c]/40 focus:border-[#d97c6c] transition"></textarea>
+
+            <button 
+              type="submit" 
+              id="form-btn"
+              class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#d97c6c] to-[#c76958] hover:from-[#c76958] hover:to-[#b75848] text-white text-xs font-semibold uppercase tracking-wider shadow transition transform active:scale-98">
+              Send Message
+            </button>
+          </form>
+
+          <div id="form-status" class="hidden text-center text-xs font-medium mt-3 text-emerald-700"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const CORRECT_PIN = "0607"; // 6 July (DDMM)
+    let enteredPin = "";
+    
+    const letterParagraphs = [
+      "I am writing this because I need to admit something honestly: we didn't end things over a silly misunderstanding—we ended because of my terrible behavior. The way I treated you and the disrespect in my tone was completely unacceptable, and there is no excuse in the world for it.",
+      "You have always been gentle, caring, and pure with me, and I responded with anger and rudeness. Seeing that I became the reason behind your tears and heartache kills me inside. I hate who I was in that moment, and I hate that I made you feel unvalued.",
+      "I am genuinely, deeply sorry, Anwesha. I don't want to make excuses; I just want you to know that I recognize my mistake, and I regret hurting you more than words can say."
+    ];
+
+    const audio = document.getElementById('bg-audio');
+    const screenGift = document.getElementById('screen-gift');
+    const screenIntro = document.getElementById('screen-intro');
+    const screenModal = document.getElementById('screen-modal');
+    const screenLetter = document.getElementById('screen-letter');
+
+    function playTapSound() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = 440;
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.08);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function openGift() {
+      audio.play().catch(() => console.log("Autoplay blocked"));
+      screenGift.classList.add('opacity-0', 'scale-90');
+      setTimeout(() => {
+        screenGift.classList.add('hidden');
+        screenIntro.classList.remove('hidden');
+        screenIntro.classList.add('flex');
+        setTimeout(() => screenIntro.classList.remove('opacity-0'), 50);
+      }, 700);
+    }
+
+    function showPasscodeModal() {
+      screenModal.classList.remove('hidden');
+      screenModal.classList.add('flex');
+      setTimeout(() => screenModal.classList.remove('opacity-0'), 50);
+    }
+
+    function closeModal() {
+      screenModal.classList.add('opacity-0');
+      setTimeout(() => {
+        screenModal.classList.remove('flex');
+        screenModal.classList.add('hidden');
+        clearKeys();
+      }, 300);
+    }
+
+    function pressKey(num) {
+      playTapSound();
+      if (enteredPin.length < 4) {
+        enteredPin += num;
+        updateDots();
+      }
+      if (enteredPin.length === 4) {
+        setTimeout(validatePin, 250);
+      }
+    }
+
+    function clearKeys() {
+      enteredPin = "";
+      updateDots();
+      document.getElementById('error-msg').textContent = "";
+    }
+
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        if (i < enteredPin.length) {
+          dot.classList.add('bg-[#d97c6c]', 'scale-110');
+        } else {
+          dot.classList.remove('bg-[#d97c6c]', 'scale-110');
+        }
+      }
+    }
+
+    function validatePin() {
+      if (enteredPin === CORRECT_PIN) {
+        closeModal();
+        screenIntro.classList.add('opacity-0');
+        setTimeout(() => {
+          screenIntro.classList.add('hidden');
+          screenIntro.classList.remove('flex');
+          screenLetter.classList.remove('hidden');
+          setTimeout(() => {
+            screenLetter.classList.remove('opacity-0');
+            startTypewriter();
+          }, 100);
+        }, 700);
+      } else {
+        const box = document.getElementById('keypad-box');
+        const err = document.getElementById('error-msg');
+        box.classList.add('shake-anim');
+        err.textContent = "Incorrect passcode, try again";
+        setTimeout(() => box.classList.remove('shake-anim'), 400);
+        setTimeout(clearKeys, 800);
+      }
+    }
+
+    function startTypewriter() {
+      const container = document.getElementById('letter-content');
+      container.innerHTML = "";
+      let pIndex = 0;
+      let charIndex = 0;
+
+      function typeNext() {
+        if (pIndex < letterParagraphs.length) {
+          if (charIndex === 0) {
+            const p = document.createElement('p');
+            p.id = `para-${pIndex}`;
+            container.appendChild(p);
+          }
+          const currentP = document.getElementById(`para-${pIndex}`);
+          currentP.textContent += letterParagraphs[pIndex].charAt(charIndex);
+          charIndex++;
+
+          if (charIndex < letterParagraphs[pIndex].length) {
+            setTimeout(typeNext, 18);
+          } else {
+            pIndex++;
+            charIndex = 0;
+            setTimeout(typeNext, 380);
+          }
+        } else {
+          container.classList.remove('typing-caret');
+          const cta = document.getElementById('cta-box');
+          cta.classList.remove('opacity-0');
+        }
+      }
+      typeNext();
+    }
+
+    function restartFlow() {
+      screenLetter.classList.add('opacity-0');
+      setTimeout(() => {
+        screenLetter.classList.add('hidden');
+        screenIntro.classList.remove('hidden');
+        screenIntro.classList.add('flex');
+        setTimeout(() => screenIntro.classList.remove('opacity-0'), 50);
+      }, 600);
+    }
+
+    // Formspree AJAX Submission Handling
+    const form = document.getElementById('feedback-form');
+    const formStatus = document.getElementById('form-status');
+    const formBtn = document.getElementById('form-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formBtn.disabled = true;
+      formBtn.textContent = 'Sending...';
+
+      const data = new FormData(form);
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          form.reset();
+          form.classList.add('hidden');
+          formStatus.textContent = "Thank you. Your message has been sent directly to me.";
+          formStatus.classList.remove('hidden');
+        } else {
+          formBtn.disabled = false;
+          formBtn.textContent = 'Send Message';
+          formStatus.textContent = "Something went wrong. You can always text me directly.";
+          formStatus.classList.remove('hidden', 'text-emerald-700');
+          formStatus.classList.add('text-rose-500');
+        }
+      } catch (err) {
+        formBtn.disabled = false;
+        formBtn.textContent = 'Send Message';
+        formStatus.textContent = "Network error. Please try texting me directly.";
+        formStatus.classList.remove('hidden', 'text-emerald-700');
+        formStatus.classList.add('text-rose-500');
+      }
+    });
+
+    // Petals Drift Canvas
+    const canvas = document.getElementById('petal-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const petals = Array.from({ length: 22 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height - height,
+      size: Math.random() * 12 + 10,
+      speedY: Math.random() * 1.2 + 0.8,
+      speedX: Math.random() * 1 - 0.5,
+      angle: Math.random() * 360,
+      spin: Math.random() * 1.5 - 0.75,
+      opacity: Math.random() * 0.4 + 0.35
+    }));
+
+    function drawPetals() {
+      ctx.clearRect(0, 0, width, height);
+      petals.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.angle * Math.PI) / 180);
+        ctx.fillStyle = `rgba(235, 140, 150, ${p.opacity})`;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-p.size / 2, -p.size / 2, -p.size, p.size / 3, 0, p.size);
+        ctx.bezierCurveTo(p.size, p.size / 3, p.size / 2, -p.size / 2, 0, 0);
+        ctx.fill();
+        ctx.restore();
+
+        p.y += p.speedY;
+        p.x += Math.sin(p.y * 0.005) + p.speedX;
+        p.angle += p.spin;
+
+        if (p.y > height + 20) {
+          p.y = -20;
+          p.x = Math.random() * width;
+        }
+      });
+      requestAnimationFrame(drawPetals);
+    }
+    drawPetals();
+  </script>
+</body>
+</html>
